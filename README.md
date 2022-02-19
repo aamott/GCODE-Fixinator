@@ -8,7 +8,11 @@ Well, first you're going to have to make sure the model's top surface is flat. I
 
 Once you know the surface is flat, you need to find out the height. If you know the layer it's on and the layer height was consistent (i.e. not using adaptive layers) use those. Otherwise, measure the height of the last printed layer as accurately as you can.
 
-You'll need Python to run the program for now. Run the program in Python and a window should come up with a prompt. 
+### JavaScript Version
+Open fixinator.htm and enter the layer height and lanumbers of layers or the height in mm.
+
+### Python Version
+Run the program in Python and a window should come up with a prompt. 
 Enter 'h' for height, 'l' (that's 'L') for layer.
 You'll be asked to enter either the layer number or the height. Don't enter 'mm' following anything: just enter the number.  
 Finally, enter the file name or path. Enter something like 
@@ -16,9 +20,11 @@ Finally, enter the file name or path. Enter something like
 or `c:/users/me/Downloads/example.gcode`
 
 To recap, you need: 
-- A flat surface
+- A flat top surface
 - The last printed layer number or height of the model
-- Python
+- Python or a Browser
 
 ## Requirements
-- Python 3
+- Python 3  
+or 
+- A Browser
