@@ -124,6 +124,23 @@
     <style>
         section>* {
             display: block;
+            margin-bottom: 15px;
+        }
+        section>h1 {
+            font-size: 2em;
+        }
+        section>div {
+            padding: 15px 20px 15px 0;
+            border-radius: 5px;
+            border: 1px solid black;
+        }
+        section input, section label, button {
+            margin-left: 5px;
+        }
+        label {
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 0px;
         }
         .hidden {
             display: none;
@@ -137,24 +154,28 @@
     </style>
 </head>
 <body>
-    <h1>GCODE Fixinator</h1>
 
     <section>
+        <h1>GCODE Fixinator</h1>
+        
         <p id="fileWarning" class="hidden warning">Please choose a valid file 😊</p>
 
-        <label for="height">Height (in mm)</label>
-        <input type="number" id="height"><br>
+        <div>
+            <label for="height">Height (in mm)</label>
+            <input type="number" id="height"><br>
+        </div>
 
-        <label for="layer">Layer (in mm)</label>
-        <input type="number" id="layer"><br>
+        <div>
+            <label for="layer">Layer (in mm)</label>
+            <input type="number" id="layer"><br>
 
-        <label for="thickness">Layer Thickness (in mm)</label>
-        <input type="number" id="thickness"><br>
+            <label for="thickness">Layer Thickness (in mm)</label>
+            <input type="number" id="thickness"><br>
+        </div>
 
         <label for="file">GCODE File</label>
         <input type="file" id="file"><br>
 
-        <label for="fixinateBtn">Fixinate</label>
         <button id="fixinateBtn">Fixinate</button><br>
 
         <button id="downloadBtn" class="hidden">Download</button>
