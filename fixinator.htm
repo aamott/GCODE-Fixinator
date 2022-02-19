@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCODE Fixinator</title>
+    <script>
+        window.addEventListener('load', function () {
+            let fileArray;
+            let newFile;
+            document.getElementById('file').onchange = function(){
+                let file = this.files[0];
+                let reader = new FileReader();
+                reader.onload = function(progressEvent){    
+                    fileArray = this.result.split(/\r\n|\n/);
+                };
+                reader.readAsText(file);
+            };
+
+            function fixinate() {
+                if ( fileArray !==undefined  && fileArray.length >0) {
+                    document.getElementById("fileWarning").classList.remove("warning");
+                    document.getElementById("fileWarning").classList.add("hidden");
+                } else {
+                    document.getElementById("fileWarning").classList.add("warning");
+                    document.getElementById("fileWarning").classList.remove("hidden");
+                    return;
+                }
+                z_height = parseFloat(document.getElementById("height").value);
+                num_layers = parseInt(document.getElementById("layer").value);
+                thickness = parseFloat(document.getElementById("thickness").value);
+                if (num_layers & thickness) { 
+                    if ( !(num_layers > 0)) {
+                        document.getElementById("layers").classList.add("invalid");
+                        z_height = null;
+                    } else if (! (thickness > 0)) { 
+                        document.getElementById("thickness").classList.add("invalid");
+                        z_height = null;
+                    } else {
+                        z_height = layer_height * num_layers;
+                    }
+                } else if ( !(z_height >= 0)) {
+                    document.getElementById("height").classList.add("invalid");
+                } 
+
+                if (z_height >= 0) {
+                    new_file = [];
+                    let still_searching = true;
+            
+                    // read file
+                    fileArray.forEach(line => {
+
+                        // skip comments
+                        if (still_searching) {
+                            if (line.startsWith(';')) {
+                                new_file.push(line);
+                            } else if (line.startsWith("G28")) { //DON'T let it home Z!
+                                new_file.push("G28 X Y\n");
+                            } else if (line.startsWith("G1") || line.startsWith("G0") || line.startsWith("G3")) { 
+                                // Regex to capture just the Zxx.x height. Index 0 will be the whole thing (Z15.1), 
+                                // 1 will be just the height (15.1). The height is also named, "height". 
+                                const height_regex = /Z(?<height>\d+\.?\d*)/g;
+                                result = height_regex.exec(line.toString());
+                                
+                                if (!result || !result.groups.height) {
+                                    return;
+                                }
+                                height = parseFloat(result.groups.height);
+                                console.log(height);
+
+                                if (height) {
+                                    if (height >= z_height){
+                                        console.log("Found height to stop cutting at! That line was:");
+                                        console.log(line);
+                                        set_height = "G92 Z" + height + "\n";
+                                        console.log("Adding a line to tell the extruder that it's at height", set_height);
+                                        new_file.push(set_height);
+
+                                        new_file.push(line);
+                                        //from here on out, we want to save everything.
+                                        still_searching = false;
+                                    } else {
+                                        return;
+                                    }
+                                } else {
+                                    return; //was a move, but no Z...
+                                }
+                            } else { //default to writing the line. Heating up, status, ...
+                                new_file.push(line);
+                            }
+                        }
+                        else { //just plain copy everything once the z height has been matched
+                            new_file.push(line);
+                        }
+                    });
+
+                    newFile = new_file.join("\n");
+                }
+
+                document.getElementById("downloadBtn").classList.remove("hidden");
+                document.getElementById("downloadBtn").addEventListener("click", downloadFile, false);
+            }
+            
+            document.getElementById("fixinateBtn").addEventListener("click", fixinate, false);
+
+            function downloadFile() {
+                filename = "fixinated_file.gcode";
+                type = "gcode";
+                var file = new Blob([newFile], {type: type});
+                var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0); 
+            }
+        })
+    </script>
+    <style>
+        section>* {
+            display: block;
+        }
+        .hidden {
+            display: none;
+        }
+        .invalid {
+            border-color: red;
+        }
+        .warning {
+            color: rgb(153, 15, 15);
+        }
+    </style>
+</head>
+<body>
+    <h1>GCODE Fixinator</h1>
+
+    <section>
+        <p id="fileWarning" class="hidden warning">Please choose a valid file 😊</p>
+
+        <label for="height">Height (in mm)</label>
+        <input type="number" id="height"><br>
+
+        <label for="layer">Layer (in mm)</label>
+        <input type="number" id="layer"><br>
+
+        <label for="thickness">Layer Thickness (in mm)</label>
+        <input type="number" id="thickness"><br>
+
+        <label for="file">GCODE File</label>
+        <input type="file" id="file"><br>
+
+        <label for="fixinateBtn">Fixinate</label>
+        <button id="fixinateBtn">Fixinate</button><br>
+
+        <button id="downloadBtn" class="hidden">Download</button>
+    </section>
+
+    
+</body>
+</html>
