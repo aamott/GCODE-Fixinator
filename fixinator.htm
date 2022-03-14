@@ -18,13 +18,24 @@
                 reader.readAsText(file);
             };
 
+            /* clear warnings */
+            function clearErrorMessages() {
+                // warning messages
+                document.getElementById("fileWarning").classList.add("hidden");
+                document.getElementById("layerWarning").classList.add("hidden")
+                document.getElementById("layerHeightWarning").classList.add("hidden")
+                // boxes highlighted
+                document.getElementById("thickness").classList.remove("invalid");
+                document.getElementById("layer").classList.remove("invalid");
+                document.getElementById("height").classList.remove("invalid");
+                return;
+            }
+
             function fixinate() {
                 // check for a missing file
                 if ( fileArray !==undefined  && fileArray.length > 0) {
-                    document.getElementById("fileWarning").classList.remove("warning");
                     document.getElementById("fileWarning").classList.add("hidden");
                 } else {
-                    document.getElementById("fileWarning").classList.add("warning");
                     document.getElementById("fileWarning").classList.remove("hidden");
                     return;
                 }
@@ -37,17 +48,22 @@
                 // Default to using number of layers and thickness
                 if (num_layers && thickness) { 
                     if ( !(num_layers > 0)) { // check invalid and for null
-                        document.getElementById("layers").classList.add("invalid");
+                        document.getElementById("layer").classList.add("invalid");
+                        document.getElementById("layerWarning").classList.remove("hidden")
                         z_height = null;
                     } else if ( !(thickness > 0)) { 
                         document.getElementById("thickness").classList.add("invalid");
                         z_height = null;
+                    // valid num_layers and valid thickness
                     } else {
-                        z_height = layer_height * num_layers;
+                        clearErrorMessages();
+                        z_height = thickness * num_layers;
                     }
+                // else use check the user entered z height
                 } else if ( !(z_height >= 0)) {
                     document.getElementById("height").classList.add("invalid");
-                } 
+                    return; // exit if there is no valid input
+                }
 
                 if (z_height >= 0) {
                     new_file = [];
@@ -101,6 +117,10 @@
                     });
 
                     newFile = new_file.join("\n");
+                } else {
+                    // don't show the download button if the file isn't valid.
+                    document.getElementById("downloadBtn").classList.add("hidden");
+                    return;
                 }
 
                 document.getElementById("downloadBtn").classList.remove("hidden");
@@ -164,6 +184,8 @@
         <h1>GCODE Fixinator</h1>
         
         <p id="fileWarning" class="hidden warning">Please choose a valid file 😊</p>
+        <p id="layerWarning" class="hidden warning">Please enter a valid layer number 😊</p>
+        <p id="layerHeightWarning" class="hidden warning">Please enter a valid layer height 😊</p>
 
         <div>
             <label for="height">Height (in mm)</label>
