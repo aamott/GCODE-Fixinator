@@ -35,7 +35,7 @@
                 thickness = parseFloat(document.getElementById("thickness").value);
 
                 // Default to using number of layers and thickness
-                if (num_layers & thickness) { 
+                if (num_layers && thickness) { 
                     if ( !(num_layers > 0)) { // check invalid and for null
                         document.getElementById("layers").classList.add("invalid");
                         z_height = null;
