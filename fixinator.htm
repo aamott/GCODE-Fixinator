@@ -19,7 +19,8 @@
             };
 
             function fixinate() {
-                if ( fileArray !==undefined  && fileArray.length >0) {
+                // check for a missing file
+                if ( fileArray !==undefined  && fileArray.length > 0) {
                     document.getElementById("fileWarning").classList.remove("warning");
                     document.getElementById("fileWarning").classList.add("hidden");
                 } else {
@@ -27,14 +28,18 @@
                     document.getElementById("fileWarning").classList.remove("hidden");
                     return;
                 }
+
+                // Get height and/or layer height and thickness
                 z_height = parseFloat(document.getElementById("height").value);
                 num_layers = parseInt(document.getElementById("layer").value);
                 thickness = parseFloat(document.getElementById("thickness").value);
+
+                // Default to using number of layers and thickness
                 if (num_layers & thickness) { 
-                    if ( !(num_layers > 0)) {
+                    if ( !(num_layers > 0)) { // check invalid and for null
                         document.getElementById("layers").classList.add("invalid");
                         z_height = null;
-                    } else if (! (thickness > 0)) { 
+                    } else if ( !(thickness > 0)) { 
                         document.getElementById("thickness").classList.add("invalid");
                         z_height = null;
                     } else {
