@@ -1,5 +1,5 @@
 # GCODE Fixinator
-Every finish a print and realize it didn't really finish? You come to see your lovely model only half finished? And for one reason or another, you can't use Power Loss Recovery - be it OctoPrint, a printer without Marlin, or a clog that luckily didn't mangle your model. I guess we restart that week long print...
+Ever finish a print and realize it didn't really finish? You come to see your lovely model only half finished? And for one reason or another, you can't use Power Loss Recovery - be it OctoPrint, a printer without Marlin, or a clog that luckily didn't mangle your model. I guess we restart that week long print...
 
 But wait! Is that a glimmer of hope and a flat top surface? Try the GCODE Fixinator! Will it fix a clump of plastic on the nozzle? No. Unfortunately not. However, it *will* remove the entire already-printed part of your model so you can resume printing where it stopped! 
 
