@@ -1,7 +1,12 @@
 # GCODE Fixinator
+## *Try it out: [GCODE Fixinator](fixinator.htm)*
+
+
 Ever finish a print and realize it didn't really finish? You come to see your lovely model only half finished? And for one reason or another, you can't use Power Loss Recovery - be it OctoPrint, a printer without Marlin, or a clog that luckily didn't mangle your model. I guess we restart that week long print...
 
-But wait! Is that a glimmer of hope and a flat top surface? Try the GCODE Fixinator! Will it fix a clump of plastic on the nozzle? No. Unfortunately not. However, it *will* remove the entire already-printed part of your model so you can resume printing where it stopped! 
+But wait! Is that a glimmer of hope and a flat top surface? Try the GCODE Fixinator! It removes the entire already-printed part of your model so you can resume printing where it stopped! 
+
+When a print is interrupted, it often leaves behind a perfectly good model base, just missing a top. GCODE Fixinator removes the already-printed GCODE, homes the X and Y axes, reheats the nozzle and bed, and then resumes the print.
 
 ## How do I use GCODE Fixinator?
 Well, first you're going to have to make sure the model's top surface is flat. If the nozzle left strands all over, you may be able to save it by removing them, but the top surface should be one smooth layer before you resume printing. 
