@@ -78,7 +78,7 @@
                                 new_file.push(line);
                             } else if (line.startsWith("G28")) { //DON'T let it home Z!
                                 new_file.push("G28 X Y\n");
-                            } else if (line.startsWith("G1") || line.startsWith("G0") || line.startsWith("G3")) { 
+                            } else if (line.startsWith("G1") || line.startsWith("G0") || line.startsWith("G3") || line.startsWith( "G2" ) ) { 
                                 // Regex to capture just the Zxx.x height. Index 0 will be the whole thing (Z15.1), 
                                 // 1 will be just the height (15.1). The height is also named, "height". 
                                 const height_regex = /Z(?<height>\d+\.?\d*)/g;

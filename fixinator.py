@@ -78,7 +78,7 @@ try:
                 elif line.startswith("G28"): # DON'T let it home Z!
                     new_file.write("G28 X Y\n")
                 
-                elif line.startswith("G1") or line.startswith("G0") or line.startswith("G3"): # Move command!
+                elif line.startswith("G1") or line.startswith("G0") or line.startswith("G3")  or line.startswith("G2"): # Move command!
                     height = re.search("Z\\d+\\.?\\d*", line) # each line should only have 1 match at most
                     if height:
                         height = height[0]
