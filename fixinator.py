@@ -72,11 +72,14 @@ try:
         for line in file:
             # skip comments
             if still_searching:
-                if line.startswith(';'):
+                if line.startswith(';'): # keep comments
                     new_file.write(line)
                 
                 elif line.startswith("G28"): # DON'T let it home Z!
                     new_file.write("G28 X Y\n")
+
+                elif line.startswith("G204"): # remove acceleration change commands. They clutter the code. 
+                    continue
                 
                 elif line.startswith("G1") or line.startswith("G0") or line.startswith("G3")  or line.startswith("G2"): # Move command!
                     height = re.search("Z\\d+\\.?\\d*", line) # each line should only have 1 match at most
